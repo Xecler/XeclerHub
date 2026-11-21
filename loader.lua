@@ -1,5 +1,7 @@
 local StarterGui = game:GetService("StarterGui")
-local hubUrl = "https://githubusercontent.com"
+local host = "https://githubusercontent.com"
+local repoPath = "Xecler/loader.lua/main/"
+local hubUrl = host .. repoPath
 
 local supportedGames = {
     ["123064301391841"] = { name = "Mini War", file = "MiniWar.lua" },
@@ -26,7 +28,7 @@ local ok, res = pcall(function()
 end)
 
 if not ok or type(res) ~= "string" or res == "" then
-    notify("❌ Ошибка", "Xeno заблокировал скачивание файла")
+    notify("❌ Ошибка", "Xeno не смог скачать файл")
     return
 end
 
