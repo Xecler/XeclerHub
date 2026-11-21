@@ -1,5 +1,4 @@
 local StarterGui = game:GetService("StarterGui")
-
 local hubUrl = "https://githubusercontent.com"
 
 local supportedGames = {
@@ -19,35 +18,26 @@ local function notify(title, text)
 end
 
 local currentPlace = supportedGames[game.PlaceId]
-
 if not currentPlace then
-    notify("❄️ XECLER HUB 🎄", "Эта игра пока не добавлена в хаб! (ID: " .. tostring(game.PlaceId) .. ")")
+    notify("❄️ XECLER HUB 🎄", "Игра не добавлена! ID: " .. tostring(game.PlaceId))
     return
 end
 
-notify("❄️ XECLER HUB 🎄", "Загрузка скрипта для: " .. currentPlace.name .. "...")
+notify("❄️ XECLER HUB 🎄", "Загрузка: " .. currentPlace.name .. "...")
 
 local fullUrl = hubUrl .. currentPlace.file
+local ok, res = pcall(function()
+    return game:HttpGet(fullUrl)
+end)
 
-for attempt = 1, 3 do
-    local success, scriptCode = pcall(function()
-        return game:HttpGet(fullUrl)
-    end)
-
-    if success and type(scriptCode) == "string" and scriptCode ~= "" then
-        local loadedFunc, err = loadstring(scriptCode)
-        if loadedFunc then
-            loadedFunc()
-            return
-        else
-            notify("❌ Ошибка кода", tostring(err))
-            return
-        end
-    end
-
-    if attempt < 3 then
-        task.wait(0.6)
-    end
+if not ok or type(res) ~= "string" or res == "" or string.find(res, "404: Not Found") then
+    notify("❌ Файл не найден", "Проверь имя файла на GitHub: " .. currentPlace.file)
+    return
 end
 
-notify("❌ Ошибка сети", "Не удалось скачать файл с GitHub. Проверьте VPN.")
+local fn, err = loadstring(res)
+if fn then
+    fn()
+else
+    notify("❌ Ошибка в скрипте", tostring(err))
+end
