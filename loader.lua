@@ -25,13 +25,13 @@ end
 
 notify("❄️ XECLER HUB 🎄", "Загрузка: " .. currentPlace.name .. "...")
 
-local fullUrl = hubUrl .. currentPlace.file
+local fullUrl = hubUrl .. currentPlace.file .. "?t=" .. tostring(os.time())
 local ok, res = pcall(function()
     return game:HttpGet(fullUrl)
 end)
 
 if not ok or type(res) ~= "string" or res == "" or string.find(res, "404: Not Found") then
-    notify("❌ Файл не найден", "Проверь имя файла на GitHub: " .. currentPlace.file)
+    notify("❌ Ошибка загрузки", "Код ответа: " .. tostring(res):sub(1, 45))
     return
 end
 
