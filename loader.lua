@@ -3,6 +3,7 @@ local StarterGui = game:GetService("StarterGui")
 local hubUrl = "https://githubusercontent.com"
 
 local supportedGames = {
+    [123064301391841] = { name = "Mini War", file = "MiniWar.lua" },
     [131346454575416] = { name = "Mini War", file = "MiniWar.lua" },
     [120219252362013] = { name = "Throw Food for Animals", file = "ThrowFood.lua" }
 }
