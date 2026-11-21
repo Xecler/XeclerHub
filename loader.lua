@@ -1,6 +1,6 @@
 local StarterGui = game:GetService("StarterGui")
 local host = "https://githubusercontent.com"
-local path = "Xecler/loader.lua/main/"
+local path = "Xecler/XeclerHub/main/"
 
 local games = {
     ["123064301391841"] = "MiniWar.lua",
