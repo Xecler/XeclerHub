@@ -206,3 +206,45 @@ local function runMiniWar()
                     local hasCollect = string.find(combined, "собрать") or string.find(combined, "collect")
                     if (hasCollect or hasAnyWord(combined, allowWords) or hasAnyWord(fullPath, allowWords)) and not hasAnyWord(fullPath, blockedWords) and not hasAnyWord(combined, blockedWords) then
                         table.insert(targets, {prompt = obj, pos = pos})
+                    end
+                end
+            end
+        end
+        CollectButton.Text = "🎄 Сбор (" .. #targets .. ")..."
+        CollectButton.BackgroundColor3 = Color3.fromRGB(215, 145, 35)
+        for _, part in ipairs(char:GetDescendants()) do if part:IsA("BasePart") then part.CanTouch = false end end
+        local collectedCount = 0
+        for _, item in ipairs(targets) do
+            local prompt = item.prompt
+            if prompt and prompt.Parent and prompt.Enabled then
+                root.CFrame = CFrame.new(item.pos + Vector3.new(0, 2.5, 0))
+                task.wait(0.07)
+                pcall(function()
+                    local oldHold = prompt.HoldDuration
+                    prompt.HoldDuration = 0
+                    fireproximityprompt(prompt)
+                    prompt.HoldDuration = oldHold
+                    collectedCount = collectedCount + 1
+                end)
+                task.wait(0.05)
+            end
+        end
+        root.CFrame = savedCFrame
+        task.wait(0.05)
+        for _, part in ipairs(char:GetDescendants()) do if part:IsA("BasePart") then part.CanTouch = true end end
+        CollectButton.Text = "✅ Собрано: " .. collectedCount
+        CollectButton.BackgroundColor3 = Color3.fromRGB(45, 175, 95)
+        task.wait(1.3)
+        CollectButton.Text = "💰 Собрать ресурсы"
+        CollectButton.BackgroundColor3 = Color3.fromRGB(34, 145, 72)
+        isCollecting = false
+    end)
+end
+
+local id = tostring(game.PlaceId)
+if id == "123064301391841" or id == "131346454575416" then
+    notify("❄️ XECLER HUB 🎄", "Запуск Mini War...")
+    runMiniWar()
+else
+    notify("❄️ XECLER HUB 🎄", "Игра пока не добавлена (ID: " .. id .. ")")
+end
